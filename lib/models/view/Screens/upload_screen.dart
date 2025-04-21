@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:tacti_track/cubit/tacti_track/cubit/TactiTrack_cibit.dart';
-import 'package:tacti_track/enums/toast_status.dart';
+import 'package:tacti_track/cubit/tacti_track/cubit/TactiTrack_cubit.dart';
 import 'package:tacti_track/managers/color_manager.dart';
+import 'package:tacti_track/models/view/Screens/video_player_screen.dart';
 import 'package:tacti_track/models/view/components/Custom_appbar.dart';
+import 'package:tacti_track/models/view/components/bottom_sheet.dart';
+import 'package:toastification/toastification.dart';
 
-import '../../../config/toast_config.dart';
+import '../../../utils/app_navigator.dart';
 import '../components/upload_container.dart';
+import 'image_viewer_screen.dart';
 
 class UploadScreen extends StatelessWidget {
   const UploadScreen({super.key});
@@ -17,27 +20,39 @@ class UploadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<TactiTrackCubit, TactiTrackState>(
       listener: (context, state) {
-        if (state is TactiTrackUploadVideoLoadingState ||
-            state is TactiTrackUploadImageLoadingState) {
-          ToastConfig.showToast(
-              msg:
-                  'Your media has been successfully uploaded. Please hold on while the model processes and analyzes the content for detection.',
-              toastStates: ToastStates.Success);
+        if (state is PickDataSucssessState) {
+          myShowBottomSheet(context,
+              isVideo: TactiTrackCubit.get(context).isVideo!, onTapStart: () {
+            Navigator.pop(context);
+            TactiTrackCubit.get(context)
+                .snedData(isVideo: TactiTrackCubit.get(context).isVideo!);
+          });
         }
-        if (state is TactiTrackUploadVideoErrorState ||
-            state is TactiTrackUploadImageErrorState) {
-          ToastConfig.showToast(
-            msg: 'Error while detecting',
-            toastStates: ToastStates.Error,
+
+        if (state is TactiTrackUploadVideoSuccessState) {
+          AppNavigator.appNavigator(
+              context,
+              VideoPlayerScreen(
+                  videoUrl: TactiTrackCubit.get(context).videoUrl!));
+          toastification.show(
+            context: context,
+            type: ToastificationType.success,
+            style: ToastificationStyle.flat,
+            title: const Text("Video successfully detected"),
+            description:
+                const Text("Your video has been successfully detecteds."),
+            alignment: Alignment.bottomCenter,
+            autoCloseDuration: const Duration(seconds: 4),
+            borderRadius: BorderRadius.circular(100.0),
+            applyBlurEffect: true,
           );
         }
-        if (state is TactiTrackUploadVideoSuccessState ||
-            state is TactiTrackUploadImageSuccessState) {
-          ToastConfig.showToast(
-              msg: state is TactiTrackUploadVideoSuccessState
-                  ? 'Video successfully detected'
-                  : 'Image successfully detected',
-              toastStates: ToastStates.Success);
+        if (state is TactiTrackUploadImageSuccessState) {
+          AppNavigator.appNavigator(
+              context,
+              ImageViewerScreen(
+                imageUrl: TactiTrackCubit.get(context).imageUrl!,
+              ));
         }
       },
       builder: (context, state) {
@@ -83,7 +98,10 @@ class UploadScreen extends StatelessWidget {
                               color: ColorManager.greenColor,
                               textColor: ColorManager.whiteColor,
                               onTap: () {
-                                cubit.pickAndUpload(context, isVideo: true);
+                                cubit.pickData(isVideo: true);
+                                cubit.isVideo = true;
+
+                                // cubit.pickAndUpload(context, isVideo: true);
                               },
                             ),
                       Gap(10.h),
@@ -105,7 +123,8 @@ class UploadScreen extends StatelessWidget {
                               iconData: Icons.image,
                               text: 'Upload Image',
                               onTap: () {
-                                cubit.pickAndUpload(context, isVideo: false);
+                                cubit.pickData(isVideo: false);
+                                cubit.isVideo = false;
                               },
                               width: double.infinity,
                               height: 150.h,

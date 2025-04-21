@@ -1,4 +1,4 @@
-part of 'TactiTrack_cibit.dart';
+part of 'TactiTrack_cubit.dart';
 
 abstract class TactiTrackState {}
 
@@ -21,3 +21,11 @@ class TactiTrackUploadImageLoadingState extends TactiTrackState {}
 class TactiTrackUploadImageSuccessState extends TactiTrackState {}
 
 class TactiTrackUploadImageErrorState extends TactiTrackState {}
+
+class PickDataErrorState extends TactiTrackState {}
+
+class PickDataSucssessState extends TactiTrackState {}
+
+class ChangeIsZoneState extends TactiTrackState {}
+
+class ChangeIsPassState extends TactiTrackState {}

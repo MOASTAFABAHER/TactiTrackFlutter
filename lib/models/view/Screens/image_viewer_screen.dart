@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tacti_track/managers/color_manager.dart';
+import 'package:tacti_track/models/view/components/window_tile_bar/main_layout.dart';
 
 class ImageViewerScreen extends StatefulWidget {
   final String imageUrl;
@@ -41,42 +42,45 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CachedNetworkImage(
-          width: double.infinity,
-          imageUrl: widget.imageUrl,
-          httpHeaders: const {
-            'Accept': 'image/*',
-            'Connection': 'keep-alive',
-          },
-          maxWidthDiskCache: 1024, // Prevent cache issues
-          cacheKey: widget.imageUrl, // Unique cache key
-          imageBuilder: (context, imageProvider) => Image(image: imageProvider),
-          placeholder: (context, url) => Scaffold(
-            backgroundColor: ColorManager.backgroundColor,
-            body: Center(
-                child: CircularProgressIndicator(
-              color: ColorManager.greenColor,
-            )),
-          ),
-          errorWidget: (context, url, error) {
-            debugPrint('Failed to load image: $url\nError: $error');
-            return const Icon(Icons.error);
-          },
-        ),
-        IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-                DeviceOrientation.portraitDown,
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight,
-              ]);
+    return MainLayout(
+      child: Stack(
+        children: [
+          CachedNetworkImage(
+            width: double.infinity,
+            imageUrl: widget.imageUrl,
+            httpHeaders: const {
+              'Accept': 'image/*',
+              'Connection': 'keep-alive',
             },
-            icon: Icon(Icons.arrow_back, color: ColorManager.whiteColor))
-      ],
+            maxWidthDiskCache: 1024, // Prevent cache issues
+            cacheKey: widget.imageUrl, // Unique cache key
+            imageBuilder: (context, imageProvider) =>
+                Image(image: imageProvider),
+            placeholder: (context, url) => Scaffold(
+              backgroundColor: ColorManager.backgroundColor,
+              body: Center(
+                  child: CircularProgressIndicator(
+                color: ColorManager.greenColor,
+              )),
+            ),
+            errorWidget: (context, url, error) {
+              debugPrint('Failed to load image: $url\nError: $error');
+              return const Icon(Icons.error);
+            },
+          ),
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.portraitUp,
+                  DeviceOrientation.portraitDown,
+                  DeviceOrientation.landscapeLeft,
+                  DeviceOrientation.landscapeRight,
+                ]);
+              },
+              icon: Icon(Icons.arrow_back, color: ColorManager.whiteColor))
+        ],
+      ),
     );
   }
 }
