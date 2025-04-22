@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tacti_track/cubit/tacti_track/cubit/TactiTrack_cubit.dart';
 import 'package:tacti_track/domain/local/sp__keys.dart';
 import 'package:tacti_track/models/view/components/video_component_large.dart';
 
@@ -24,14 +25,23 @@ class _HistoryScreenLargeState extends State<HistoryScreenLarge> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: videoPaths.length,
-        itemBuilder: (context, index) {
-          return VideoComponentLarge(
-            videoUrl: videoPaths[index],
-          );
-        });
+    return BlocListener<TactiTrackCubit, TactiTrackState>(
+      listener: (context, state) {
+        if (state is TactiTrackUploadVideoSuccessState) {
+          videoPaths = SharedPrefrenceHelper.getStringList(
+              key: SharedPreferencesKeys.videoPaths);
+          setState(() {});
+        }
+      },
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: videoPaths.length,
+          itemBuilder: (context, index) {
+            return VideoComponentLarge(
+              videoUrl: videoPaths[index],
+            );
+          }),
+    );
   }
 }

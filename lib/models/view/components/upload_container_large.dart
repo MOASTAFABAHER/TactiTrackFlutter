@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 import '../../../managers/color_manager.dart';
 
@@ -38,7 +37,7 @@ class _UploadContainerLargeState extends State<UploadContainerLarge> {
           borderRadius: BorderRadius.circular(5.sp),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.all(4.sp),
+            padding: const EdgeInsets.all(8),
             width: 60.w,
             height: 50.h,
             decoration: BoxDecoration(
@@ -60,7 +59,7 @@ class _UploadContainerLargeState extends State<UploadContainerLarge> {
                       widget.text,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 4.sp,
+                          fontSize: 14,
                           color: widget.textColor),
                     ),
             ),

@@ -27,15 +27,16 @@ class _OnBoardingWebCopmonentState extends State<OnBoardingWebCopmonent> {
         borderRadius: BorderRadius.circular(10.sp),
         shadowColor: ColorManager.whiteColor.withOpacity(0.5),
         child: AnimatedContainer(
-          padding: EdgeInsets.all(4.sp),
+          padding: const EdgeInsets.all(8),
           duration: const Duration(milliseconds: 200),
           width: 90.w,
-          height: 400.h,
+          height: 360.h,
           decoration: BoxDecoration(
             color: ColorManager.backgroundColor,
             borderRadius: BorderRadius.circular(10.sp),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gap(2.h),
               Image.asset(
@@ -47,7 +48,7 @@ class _OnBoardingWebCopmonentState extends State<OnBoardingWebCopmonent> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  fontSize: 8.sp,
+                  fontSize: 24,
                   color: ColorManager.whiteColor,
                 ),
               ),
