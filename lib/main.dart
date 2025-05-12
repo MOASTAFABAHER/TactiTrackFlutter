@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tacti_track/app_root/tacti_track.dart';
 import 'package:tacti_track/domain/dio_helper.dart';
 
@@ -12,7 +13,6 @@ void main() async {
   fvp.registerWith();
   await SharedPrefrenceHelper.init();
 
-
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     doWhenWindowReady(() {
       const initialSize = Size(1000, 690);
@@ -22,7 +22,15 @@ void main() async {
       appWindow.show();
     });
   }
-
+  if (Platform.isAndroid || Platform.isIOS) {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations(
+      [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ],
+    );
+  }
   runApp(const TactiTrack());
   DioHelper.init();
 }

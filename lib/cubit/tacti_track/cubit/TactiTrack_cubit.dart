@@ -10,10 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tacti_track/domain/dio_helper.dart';
 import 'package:tacti_track/domain/local/sp__keys.dart';
 import 'package:tacti_track/domain/local/sp_helper.dart';
-import 'package:tacti_track/models/view/Screens/image_viewer_screen.dart';
-import 'package:tacti_track/utils/app_navigator.dart';
-
-import '../../../models/view/Screens/video_player_screen.dart';
 
 part 'TactiTrack_state.dart';
 
@@ -29,8 +25,7 @@ class TactiTrackCubit extends Cubit<TactiTrackState> {
   File? file;
   // ignore: prefer_typing_uninitialized_variables
   var responseData;
-  Future<void> snedData(
-     {
+  Future<void> snedData({
     required bool isVideo,
   }) async {
     // Prepare FormData
@@ -61,14 +56,13 @@ class TactiTrackCubit extends Cubit<TactiTrackState> {
         videoUrl = mediaUrl;
         SharedPrefrenceHelper.addStringToList(
             key: SharedPreferencesKeys.videoPaths, value: videoUrl!);
-  
+
         emit(TactiTrackUploadVideoSuccessState());
       } else {
         imageUrl = mediaUrl;
         SharedPrefrenceHelper.addStringToList(
             key: SharedPreferencesKeys.imagesPath, value: imageUrl!);
         log(imageUrl.toString());
-
 
         emit(TactiTrackUploadImageSuccessState());
       }

@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tacti_track/managers/color_manager.dart';
-import 'package:tacti_track/models/view/components/window_tile_bar/main_layout.dart';
 
 class ImageViewerScreen extends StatefulWidget {
   final String imageUrl;
@@ -20,13 +20,18 @@ class ImageViewerScreen extends StatefulWidget {
 }
 
 class _ImageViewerScreenState extends State<ImageViewerScreen> {
+  Key _imageKey = UniqueKey();
+
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
     super.initState();
+    // Delayed orientation change to avoid rendering issues
+    Future.delayed(Duration.zero, () {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+      ]);
+    });
   }
 
   @override
@@ -42,44 +47,71 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Stack(
-        children: [
-          CachedNetworkImage(
-            width: double.infinity,
-            imageUrl: widget.imageUrl,
-            httpHeaders: const {
-              'Accept': 'image/*',
-              'Connection': 'keep-alive',
-            },
-            maxWidthDiskCache: 1024, // Prevent cache issues
-            cacheKey: widget.imageUrl, // Unique cache key
-            imageBuilder: (context, imageProvider) =>
-                Image(image: imageProvider),
-            placeholder: (context, url) => Scaffold(
-              backgroundColor: ColorManager.backgroundColor,
-              body: Center(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: ColorManager.backgroundColor,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: CachedNetworkImage(
+                key: _imageKey,
+                width: double.infinity,
+                imageUrl: widget.imageUrl,
+                httpHeaders: const {
+                  'Accept': 'image/*',
+                  'Connection': 'keep-alive',
+                },
+                maxWidthDiskCache: 1024,
+                cacheKey: widget.imageUrl,
+                imageBuilder: (context, imageProvider) =>
+                    Image(image: imageProvider, fit: BoxFit.contain),
+                placeholder: (context, url) => Center(
                   child: CircularProgressIndicator(
-                color: ColorManager.greenColor,
-              )),
+                    color: ColorManager.greenColor,
+                  ),
+                ),
+                errorWidget: (context, url, error) {
+                  debugPrint('Failed to load image: $url\nError: $error');
+                  return Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        _imageKey = UniqueKey();
+                        setState(() {}); // This forces the image to rebuild
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.error, size: 28.sp, color: Colors.red),
+                          SizedBox(height: 12.h),
+                          const Text(
+                            'Failed to load image',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            errorWidget: (context, url, error) {
-              debugPrint('Failed to load image: $url\nError: $error');
-              return const Icon(Icons.error);
-            },
-          ),
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.portraitUp,
-                  DeviceOrientation.portraitDown,
-                  DeviceOrientation.landscapeLeft,
-                  DeviceOrientation.landscapeRight,
-                ]);
-              },
-              icon: Icon(Icons.arrow_back, color: ColorManager.whiteColor))
-        ],
+            Positioned(
+              top: 16,
+              left: 16,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                    DeviceOrientation.landscapeLeft,
+                    DeviceOrientation.landscapeRight,
+                  ]);
+                },
+                icon: Icon(Icons.arrow_back, color: ColorManager.whiteColor),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
