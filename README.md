@@ -1,6 +1,6 @@
-# ⚽ TactiTrak – Flutter-Based Football Analysis Application
+# ⚽ TactiTrack – Flutter-Based Football Analysis Application
 
-**TactiTrak** is a cross-platform AI-powered football match analysis application built with **Flutter**, designed to run seamlessly on both **mobile** and **desktop** devices. It enables users to upload match videos or images and leverages AI to extract tactical insights such as player detection, team classification, zone control, and pass line analysis.
+**TactiTrack** is a cross-platform AI-powered football match analysis application built with **Flutter**, designed to run seamlessly on both **mobile** and **desktop** devices. It enables users to upload match videos or images and leverages AI to extract tactical insights such as player detection, team classification, zone control, and pass line analysis.
 
 ---
 
@@ -36,6 +36,13 @@ Built using a unified Flutter codebase for a consistent experience across all pl
 - Identifies pass lines and calculates ball possession.
 - Divides the field into 6 tactical zones and determines team dominance in each.
 
+- Team classifer
+![alt text](https://github.com/MOASTAFABAHER/TactiTrackFlutter/blob/fbd6140296ef50b4bee6db4ed52fba506540838c/team_classifer.png)
+
+-Zone Controll
+![alt text](https://github.com/MOASTAFABAHER/TactiTrackFlutter/blob/fbd6140296ef50b4bee6db4ed52fba506540838c/zone_controll_mockup.png)
+- pas detection
+![alt text](https://github.com/MOASTAFABAHER/TactiTrackFlutter/blob/fbd6140296ef50b4bee6db4ed52fba506540838c/pass_detection.png)
 
 ### 🔸 User Interface
 - Responsive UI adapted for both mobile and desktop screens.
