@@ -36,9 +36,9 @@ Built using a unified Flutter codebase for a consistent experience across all pl
 - Identifies pass lines and calculates ball possession.
 - Divides the field into 6 tactical zones and determines team dominance in each.
 
+
 - Team classifer
 ![alt text](https://github.com/MOASTAFABAHER/TactiTrackFlutter/blob/fbd6140296ef50b4bee6db4ed52fba506540838c/team_classifer.png)
-
 -Zone Controll
 ![alt text](https://github.com/MOASTAFABAHER/TactiTrackFlutter/blob/fbd6140296ef50b4bee6db4ed52fba506540838c/zone_controll_mockup.png)
 - pas detection
